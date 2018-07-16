@@ -24,7 +24,6 @@ class Player(Base):
     hand = Column(String)
     link = Column(String)
     birthPlace = Column(String)
-    hole_scores = relationship('HoleScore', back_populates='player')
     player_tournaments = relationship("PlayerEvent",
                                       back_populates="player")
     events = relationship("PlayerEvent", back_populates="player")
@@ -35,6 +34,11 @@ class Player(Base):
                f"dateOfBirth={self.dateOfBirth}, hand={self.hand}, "\
                f"link={self.link}, birthPlace={self.birthPlace})>"
 
+    @classmethod
+    def new_from_leaderboard(cls, data):
+        skipkeys = {'countryFlag', 'rank', 'stats', 'id'}
+        return cls(player_id=data['id'],
+                   **{k: v for k, v in data.items() if k not in skipkeys})
 
 class PlayerEvent(Base):
 
@@ -51,6 +55,15 @@ class PlayerEvent(Base):
                                back_populates="player_event")
     event = relationship('Event', back_populates='players', uselist=False)
     player = relationship('Player', back_populates='events', uselist=False)
+    rounds = relationship('Round', back_populates='player_event')
+
+    @classmethod
+    def leaderboard_player(cls, data):
+        skipkeys = {'countryFlag', 'stats', 'id', 'displayName', 'fullName'}
+        return cls(player_id=data['id'],
+                   **{k: v for k, v in data.items() if k not in skipkeys})
+
+
     
 
 class PlayerEventStats(Base):
