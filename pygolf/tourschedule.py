@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import (Column, DateTime, Enum, ForeignKey,
-                        Integer, String, UniqueConstraint)
+                        Integer, String, Table, UniqueConstraint)
 from sqlalchemy.orm import relationship
 from pygolf import Base
 
@@ -47,13 +47,14 @@ class Season(Base):
         endDate = datetime.strptime(endDate, DT_FMT)
         super().__init__(startDate=startDate, endDate=endDate, **kwargs)
         
-        
-class EventCourse(Base):
-    
-    __tablename__ = 'tbl_eventcourse'
-    
-    event_id = Column(Integer, ForeignKey('tbl_event.id'), primary_key=True)
-    course_id = Column(Integer, ForeignKey('tbl_course.courseId'), primary_key=True )
+
+event_course_table = Table(
+    'tbl_eventcourse', Base.metadata,
+    Column('event_id', Integer,
+           ForeignKey('tbl_event.id'), primary_key=True),
+    Column('course_id', Integer,
+           ForeignKey('tbl_course.courseId'), primary_key=True)
+)
 
 class Event(Base):
 
