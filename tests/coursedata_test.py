@@ -31,14 +31,15 @@ def test_instantiate_hole_data():
     e = Event(startDate="2002-08-18T07:00Z", endDate="2002-08-18T07:00Z",
               label='an event')
     c = coursedata.Course(**course)
-    e.course = c
+    e.courses.append(c)
     for hole in hole_data:
         del hole['holeStatistics']
         h = coursedata.HoleData(**hole)
+        h.event = e
         assert isinstance(h, coursedata.HoleData)
         c.hole_data.append(h)
     assert len(c.hole_data) == 18
     assert h.course is c
-    assert e.course is c
+    assert c in e.courses
     assert e in c.events
     assert h.event is e
