@@ -4,14 +4,10 @@ import logging
 from sqlalchemy.exc import IntegrityError
 
 from pygolf import Event, rsess, Season, Session, Tour
+from .helpers import getter
 
 
 TOURS = ['pga', 'lpga', 'eur', 'ntw']
-
-def getter(url):
-    logging.info(f'Getting: {url}')
-    r = rsess.get(url)
-    return r.text
 
 
 def season_getter(year, session, idset):

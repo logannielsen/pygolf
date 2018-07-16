@@ -15,8 +15,6 @@ from helpers import create_db_and_session
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'roundata.txt'), 'r') as f:
+with open(path.join(here, 'rmac.txt'), 'r') as f:
     course_data = json.load(f)
     
-course = course_data.get('courses')[0]
-hole_data = course.pop('holes')

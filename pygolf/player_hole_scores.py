@@ -1,14 +1,14 @@
 from datetime import datetime
 
-from sqlalchemy import (Column, DateTime, ForeignKey, ForeignKeyConstraint,
-                        Integer, String)
+from sqlalchemy import (Column, DateTime, ForeignKey,
+                        ForeignKeyConstraint, Integer, String)
 from sqlalchemy.orm import relationship
 from pygolf import Base
 
 DT_FMT = "%Y-%m-%dT%H:%MZ"
 
 
-class Rounds(Base):
+class Round(Base):
 
     __tablename__ = 'tbl_player_round_data'
 
@@ -27,29 +27,36 @@ class Rounds(Base):
     movement = Column(Integer)
     teetime = Column(DateTime)
     course = relationship('Course', uselist=False)
+    player_event = relationship('PlayerEvent', uselist=False)
+    holes = relationship('HoleScore', back_populates='round')
+    ForeignKeyConstraint(
+        [player_id, event_id],
+        ['tbl_tournament_players.player_id',
+         'tbl_tournament_players.event_id']
+    )
     
 
 class HoleScore(Base):
 
     __tablename__ = 'tbl_player_hole_data'
 
-    player_id = Column(Integer, ForeignKey('tbl_player.player_id'), 
-                       primary_key=True)
+    player_id = Column(Integer, primary_key=True)
     event_id = Column(Integer, ForeignKey('tbl_event.id'),
                            primary_key=True)
-    round_number = Column(Integer, ForeignKey('tbl_player_round_data.period'),
-                          primary_key=True)
+    round_number = Column(Integer, primary_key=True)
     period = Column(Integer, primary_key=True)
-    courseId = Column(Integer, ForeignKey('tbl_course.courseId'))
+    courseId = Column(Integer)
     value = Column(Integer)
     displayValue = Column(Integer)
     par = Column(String)
-    player = relationship('Player', back_populates='hole_scores')
+    hole_data_id = Column(Integer,
+                          ForeignKey('tbl_hole_data.hole_data_id'))
     hole_data = relationship('HoleData', back_populates='hole_scores')
-    course = relationship('Course', uselist=False)
-    
-    ForeignKeyConstraint([courseId, event_id, period],
-                         ['tbl_hole_data.course_id', 'tbl_hole_data.event_id',
-                          'tbl_hole_data.holeNumber'])
+    round = relationship('Round', back_populates='holes')
+
+    ForeignKeyConstraint([player_id, event_id, period],
+                         ['tbl_player_round_data.player_id',
+                          'tbl_player_round_data.event_id',
+                          'tbl_player_round_data.period'])                     
 
     

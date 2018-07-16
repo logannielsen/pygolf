@@ -8,11 +8,7 @@ from sqlalchemy.exc import IntegrityError
 
 from pygolf import (Event, rsess, Season, Session, Tour, Course, HoleData,
                     Player, PlayerEvent, PlayerEventStats)
-
-def getter(url):
-    logging.info(f'Getting: {url}')
-    r = rsess.get(url)
-    return r.text
+from .helpers import getter
 
 def player_data_getter(event_id, player_id, session): 
     url = (f'http://site.api.espn.com/apis/site/v2/sports/golf/pga/leaderboard/{event_id}/playersummary?player={player_id}&season=2018&lang=en&region=us')

@@ -5,11 +5,7 @@ from sqlalchemy.exc import IntegrityError
 
 from pygolf import (Event, rsess, Season, Session, Tour, Course, HoleData,
                     Player, PlayerEvent, PlayerEventStats)
-
-def getter(url):
-    logging.info(f'Getting: {url}')
-    r = rsess.get(url)
-    return r.text
+from .helpers import getter
 
 def player_data_getter(event, session): 
     logging.debug(f'processing: {event.label}')
@@ -27,11 +23,6 @@ def player_data_getter(event, session):
             for stat_dict in player_dict.get('stats', []):
                 player_event_obj.event_stats.append(PlayerEventStats(**stat_dict))
     session.flush()
-
-#        player_info = player_dict.update(player_id = player['id'], fullName = player['fullName'])
-#        print(player_info)
-#        player_obj = Player(**player_info)
-#        session.add(player_obj)
 
 def main():
     logging.info('Starting')
