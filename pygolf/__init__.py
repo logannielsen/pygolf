@@ -31,6 +31,6 @@ rsess.headers.update(headers)
 from .tourschedule import *
 from .coursedata import *
 from .players import *
-from .Rounddata import *
+from .player_hole_scores import *
 
 #Base.metadata.create_all(bind=engine)
