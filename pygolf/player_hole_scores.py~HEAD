@@ -25,7 +25,7 @@ class Round(Base):
     startPosition = Column(Integer)
     currentPosition = Column(Integer)
     movement = Column(Integer)
-    teetime = Column(DateTime)
+    teeTime = Column(DateTime)
     course = relationship('Course', uselist=False)
     player_event = relationship('PlayerEvent', uselist=False)
     holes = relationship('HoleScore', back_populates='round')
@@ -35,6 +35,19 @@ class Round(Base):
          'tbl_tournament_players.event_id']
     )
     
+    @classmethod
+    def round_instantiation(cls, course_data):
+        rounds = course_data['rounds']
+        l = []
+        skipkeys = {'linescores', 'hasStream'}
+        for r in rounds:
+            instin = cls(
+                **{k:v for k, v in r.items() if k not in skipkeys}
+            )
+            l.append(instin)
+        return l 
+            
+        
 
 class HoleScore(Base):
 
@@ -60,3 +73,14 @@ class HoleScore(Base):
                           'tbl_player_round_data.period'])                     
 
     
+    @classmethod
+    def hole_score_instantiation(cls, course_data):
+        rounds = course_data['rounds']
+        l = []
+        skipkeys = {'value', 'displayValue', 'hasStream', 'period', 'outScore', 'inScore', 'startPosition', 'currentPosition', 'movement', 'teeTime'}
+        for r in rounds:
+            instin = cls(
+                **{k:v for k, v in r.items() if k not in skipkeys}
+            )
+            l.append(instin)
+        return l 

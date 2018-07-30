@@ -1,6 +1,6 @@
 """course information tables - includes hole distance, hole number, hole yards
  and hole statistics (score to par, average score, eagles, birdies, bogeys, 
- double bogeys, double bogey +, difficulty ranking)  """"
+ double bogeys, double bogey +, difficulty ranking)  """
 
 from datetime import datetime
 
