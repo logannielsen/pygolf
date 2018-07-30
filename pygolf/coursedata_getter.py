@@ -4,13 +4,9 @@ import logging
 from sqlalchemy.exc import IntegrityError
 
 from pygolf import Event, rsess, Season, Session, Tour, Course, HoleData
+from .helpers import getter
 
 TOURS = ['pga', 'lpga', 'eur', 'ntw']
-
-def getter(url):
-    logging.info(f'Getting: {url}')
-    r = rsess.get(url)
-    return r.text
 
 def course_data_getter(event, session): 
     logging.debug(f'processing: {event.label}')
@@ -55,6 +51,3 @@ def main():
 if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     main()
-
-# python main2.py
-    
