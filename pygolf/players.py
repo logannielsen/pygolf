@@ -40,6 +40,12 @@ class Player(Base):
         return cls(player_id=data['id'],
                    **{k: v for k, v in data.items() if k not in skipkeys})
 
+    @classmethod
+    def profile_information(cls, course_data):
+        profile = course_data['profile']
+        skipkeys = {'age', 'headshot', 'rank', 'earnings', 'displayName'}
+        return cls(**{k: v for k, v in profile.items() if k not in skipkeys})
+
 class PlayerEvent(Base):
 
     __tablename__ = 'tbl_tournament_players'
@@ -89,4 +95,11 @@ class PlayerEventStats(Base):
              "tbl_tournament_players.event_id"],
             name="fk player_tournament"
         ),)  
+
+    @classmethod
+    def leaderboard_player_stats(cls, data):
+        stat = data['stats']
+        return [cls(**s) for s in stat]
+
+                   
     
