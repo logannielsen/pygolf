@@ -1,3 +1,5 @@
+import logging
+
 from pygolf import rsess
 
 def getter(url):
@@ -6,7 +8,7 @@ def getter(url):
     for i in range(retries):
         try:
             r = rsess.get(url)
-        except Exception as e:
+        except Exception:
             logging.exception(f'Failed getting: {url} (attempt: {i})')
             if i == retries - 1:
                 raise

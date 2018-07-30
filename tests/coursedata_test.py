@@ -43,3 +43,5 @@ def test_instantiate_hole_data():
     assert c in e.courses
     assert e in c.events
     assert h.event is e
+
+# pytest coursedata_test.py
